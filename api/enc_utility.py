@@ -13,7 +13,7 @@ def encrypt_data(plaintext):
     padder = padding.PKCS7(algorithms.AES.block_size).padder()
     plaintext_bytes = bytes(plaintext, "utf-8")
     padded_bytes = padder.update(plaintext_bytes) + padder.finalize()
-    ciphertext_bytes = aes_encryptor.update(plaintext_bytes) + aes_encryptor.finalize()
+    ciphertext_bytes = aes_encryptor.update(padded_bytes) + aes_encryptor.finalize()
     return ciphertext_bytes.hex()
 
 def decrypt_data(ciphertext):
@@ -24,10 +24,10 @@ def decrypt_data(ciphertext):
     aes_decryptor = aes_cipher.decryptor()
     unpadder = padding.PKCS7(algorithms.AES.block_size).unpadder()
     ciphertext_bytes = bytes.fromhex(ciphertext)
-    padded_bytes_2 = aes_decryptor.update(ciphertext_bytes) + aes_decryptor.finalize()
-    plaintext_bytes_2 = unpadder.update(padded_bytes_2) + unpadded.finalize()
-    return str(plaintext_bytes_2, "utf-8")
+    padded_bytes = aes_decryptor.update(ciphertext_bytes) + aes_decryptor.finalize()
+    plaintext_bytes = unpadder.update(padded_bytes) + unpadder.finalize()
+    return str(plaintext_bytes, "utf-8")
 
-def encrypt_password(password)
-    hashedPwd = hashlib.sha256(password.encode()).hexdigest()
-    return hashedPwd
+def encrypt_password(password):
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_password
